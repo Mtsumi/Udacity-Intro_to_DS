@@ -220,52 +220,47 @@ def user_stats(df):
     print('-' * 40)
 
 
+def display_data(df):
+    """
+    Displays individual trip data in increments of 5 rows as requested by the user.
 
-import time
-import pandas as pd
-import numpy as np
-import streamlit as st
+    Args:
+        df (DataFrame): Pandas DataFrame containing the bike-sharing data.
+    """
+    start_loc = 0
+    view_data = input('\nWould you like to view 5 rows of individual trip data? Enter yes or no: ').lower()
+
+    while view_data == 'yes':
+        end_loc = start_loc + 5
+        print(df.iloc[start_loc:end_loc])
+        
+        start_loc += 5
+
+        view_data = input('Do you wish to continue? Enter yes or no: ').lower()
+
+        if view_data != 'yes':
+            break
+
 
 
 def main():
-    st.title('US Bikeshare Data Analysis')
+    while True:
+        city, month, day = get_filters()
+        df = load_data(city, month, day)
 
-    city, month, day = get_filters()
-    df = load_data(city, month, day)
+        time_stats(df)
+        station_stats(df)
+        trip_duration_stats(df)
+        user_stats(df)
 
-    st.header('Time Stats')
-    time_stats(df)
+        display_raw_data = input('\nWould you like to view individual trip data? Enter yes or no: ').lower()
+        if display_raw_data == 'yes':
+            display_data(df)
 
-    st.header('Station Stats')
-    station_stats(df)
+        restart = input('\nWould you like to restart? Enter yes or no.\n')
+        if restart.lower() != 'yes':
+            break
 
-    st.header('Trip Duration Stats')
-    trip_duration_stats(df)
-
-    st.header('User Stats')
-    user_stats(df)
-
-    restart = st.button('Restart Analysis')
-    if restart:
-        main()
 
 if __name__ == "__main__":
-    main()
-
-# def main():
-#     while True:
-#         city, month, day = get_filters()
-#         df = load_data(city, month, day)
-
-#         time_stats(df)
-#         station_stats(df)
-#         trip_duration_stats(df)
-#         user_stats(df)
-
-#         restart = input('\nWould you like to restart? Enter yes or no.\n')
-#         if restart.lower() != 'yes':
-#             break
-
-
-# if __name__ == "__main__":
-# 	main()
+	main()
